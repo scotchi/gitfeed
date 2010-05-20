@@ -1,0 +1,34 @@
+#!/usr/bin/env ruby
+
+require 'rubygems'
+require 'gitfeed'
+
+unless ARGV.size >= 1
+  warn <<END
+Usage: gitfeed [options] /path/to/git/repository
+
+Options:
+    --title="RSS Feed Title"
+    --url=http://base.url.com/
+    --description="RSS Feed Descrption"
+    --template=/path/to/haml/template/for/entries
+    --include-diffs=false
+END
+  exit! 1
+end
+
+options = {}
+
+until ARGV.size <= 1 do
+  kv = ARGV.shift.split('=')
+  key = kv.first.sub(/^--/, '').gsub('-', '_').to_sym
+  value = kv.last
+  value = false if value == 'false'
+  value = true if value == 'true'
+  options[key] = value
+end  
+
+repository = ARGV.shift
+
+Gitfeed::Server.start(repository, options)
+

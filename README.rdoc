@@ -1,16 +1,58 @@
 = gitfeed
 
-Description goes here.
+Produces an RSS v2 XML stream for a Git repository.  Can be used inline in an
+application or as a stand-alone server.
 
-== Note on Patches/Pull Requests
- 
-* Fork the project.
-* Make your feature addition or bug fix.
-* Add tests for it. This is important so I don't break it in a
-  future version unintentionally.
-* Commit, do not mess with rakefile, version, or history.
-  (if you want to have your own version, that is fine but bump version in a commit by itself I can ignore when I pull)
-* Send me a pull request. Bonus points for topic branches.
+== Usage
+
+Gitfeed can be used inline in an application to produce a string with the RSS
+commits:
+
+  require 'rubygems'
+  require 'gitfeed'
+
+  gf = Gitfeed.new('/home/git/repository')
+  puts gf.feed
+
+It can also be used as a standalone server inside of an application:
+
+  require 'rubygems'
+  require 'gitfeed'
+
+  Gitfeed::Server.start('/home/git/repository')  
+
+Or it can be used on the command line:
+
+  gitfeed /home/git/repository
+
+== Customizing the output
+
+You can specify a Haml file to be used for each entry, the default is:
+  /  
+  %p
+    %strong Author:
+    = entry.author.name
+    &lt;
+    %a{ :href => "mailto:#{entry.author.email}" }
+      = entry.author.email
+    &gt;
+  %p
+    %strong Date:
+    = entry.author.date
+  %p
+    %strong Message:
+    = entry.message
+  %p
+    %strong SHA:
+    = entry.objectish
+  - if @include_diffs && !entry.parents.empty?
+    %pre
+      = @git.diff(entry.parents.first.objectish, entry.objectish)
+
+This can be passed as a configuration option either to the construtor, server
+or command line:
+
+  gitfeed --template=template.haml /home/git/repository
 
 == Copyright
 

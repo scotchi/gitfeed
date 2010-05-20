@@ -5,13 +5,14 @@ begin
   require 'jeweler'
   Jeweler::Tasks.new do |gem|
     gem.name = "gitfeed"
-    gem.summary = %Q{TODO: one-line summary of your gem}
-    gem.description = %Q{TODO: longer description of your gem}
-    gem.email = "scott@directededge.com"
-    gem.homepage = "http://github.com/directededge/gitfeed"
+    gem.summary = %Q{Git to RSS converter and optional stand-alone server}
+    gem.description = %Q{Ruby gem to create RSS feeds from commits in a Git stream and an optional Sinatra based server}
+    gem.email = "wheeler@kde.org"
+    gem.homepage = "http://github.com/scotchi/gitfeed"
     gem.authors = ["Scott Wheeler"]
-    gem.add_development_dependency "thoughtbot-shoulda", ">= 0"
-    # gem is a Gem::Specification... see http://www.rubygems.org/read/chapter/20 for additional settings
+    gem.add_dependency "sinatra"
+    gem.add_dependency "haml"
+    gem.add_dependency "git"
   end
   Jeweler::GemcutterTasks.new
 rescue LoadError

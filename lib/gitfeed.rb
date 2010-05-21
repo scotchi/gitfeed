@@ -28,7 +28,11 @@ class Gitfeed
   #  Include diffs in the RSS output
 
   def initialize(repository_path, options = {})
-    @git = Git.open(repository_path)
+    if File.exists? "#{repository_path}/.git"
+      @git = Git.open(repository_path)
+    else
+      @git = Git.bare(repository_path)
+    end
     @title = options[:title] || "Gitfeed for #{repository_path.sub(/.*\//, '')}"
     @url = options[:url] || 'http://github.com/scotchi/gitfeed'
     @description = options[:description] || repository_path
